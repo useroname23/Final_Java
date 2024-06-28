@@ -9,9 +9,10 @@ public class SessaoView {
         scanner = new Scanner(System.in);
     }
 
-      public int lerInt(String mensagem) {
+     public int lerInt(String mensagem) {
         System.out.print(mensagem);
-        return scanner.nextInt();
+        int intLeitor = (scanner.nextInt() -  1);
+        return intLeitor;
     }
 
     public String lerString(String mensagem) {

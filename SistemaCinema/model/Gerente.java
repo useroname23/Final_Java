@@ -7,6 +7,6 @@ public class Gerente extends Funcionario {
 
     @Override
     public void realizarTarefa() {
-        System.out.println("> Gerente realizando tarefa.");
+        System.out.println();
     }
 }

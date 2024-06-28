@@ -10,8 +10,8 @@ public class ClienteController {
 
     public Cliente criarCliente() {
         String nome = view.lerNome();
-        String cpf = view.lerCpf();
-        String idade = view.lerIdade();
+        int cpf = view.lerCpf();
+        int idade = view.lerIdade();
         String sexo = view.lerSexo();
         return new Cliente(nome, cpf, idade, sexo);
     }

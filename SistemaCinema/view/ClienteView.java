@@ -10,22 +10,68 @@ public class ClienteView {
     }
 
     public String lerNome() {
-        System.out.print("> Nome do cliente: ");
-        return scanner.nextLine();
+        String nome;
+        while (true) {
+            System.out.print("> Nome do cliente: ");
+                nome = scanner.nextLine();
+                if (nome.matches("[a-zA-Z\\s]+")) {
+                    break;
+                } else {
+                    System.out.println("Nome inválido. Use apenas letras e espaços.");
+                }
+            }
+        return nome;
     }
 
-    public String lerCpf() {
-        System.out.print("> CPF do cliente: ");
-        return scanner.nextLine();
+    public int lerCpf() {
+        int cpf;
+        while (true) {
+            System.out.print("> CPF do cliente: ");
+            if (scanner.hasNextInt()) {
+                cpf = scanner.nextInt();
+                if (cpf > 0) {
+                    break;
+                } else {
+                    System.out.println("Digite novamente. Use um número inteiro positivo.");
+                }
+                }else {
+                System.out.println("Digite novamente. Use um número inteiro positivo.");
+                scanner.next();
+            }
+        }
+        return cpf;
     }
-        public String lerIdade() {
+        public int lerIdade() {
+            int idadi;
+            while (true) {
             System.out.print("> Idade do cliente: ");
-            return scanner.nextLine();
+            if (scanner.hasNextInt()) {
+                idadi = scanner.nextInt();
+                if (idadi > 0) {
+                    break;
+                } else {
+                    System.out.println("Digite novamente. Use um número inteiro positivo.");
+                }
+                }else {
+                System.out.println("Digite novamente. Use um número inteiro positivo.");
+                scanner.next();
+            }
+        }
+        return idadi;
     }
     
     public String lerSexo() {
-        System.out.print("> Sexo do cliente: ");
-        return scanner.nextLine();
+        String sexo;
+        while (true) {
+            System.out.print("> Sexo do cliente: ");
+            sexo = scanner.nextLine();
+            if (sexo.matches("[a-zA-Z\\s]+")) {
+                break;
+            } else {
+                System.out.println("Sexo inválido.");
+            }
+        }
+        return sexo;
 }
 
 }

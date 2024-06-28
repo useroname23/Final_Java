@@ -7,6 +7,6 @@ public class Atendente extends Funcionario {
 
     @Override
     public void realizarTarefa() {
-        System.out.println("> Atendente realizando tarefa.");
+        System.out.println();
     }
 }

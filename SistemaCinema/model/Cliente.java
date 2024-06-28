@@ -2,11 +2,11 @@ package model;
 
 public class Cliente {
     private String nome;
-    private String cpf;
-    private String idade;
+    private int cpf;
+    private int idade;
     private String sexo;
 
-    public Cliente(String nome, String cpf, String idade, String sexo) {
+    public Cliente(String nome, int cpf, int idade, String sexo) {
         this.nome = nome;
         this.cpf = cpf;
         this.idade = idade;
@@ -17,11 +17,11 @@ public class Cliente {
         return nome;
     }
 
-    public String getCpf() {
+    public int getCpf() {
         return cpf;
     }
 
-    public String getIdade() {
+    public int getIdade() {
         return idade;
     }
 
