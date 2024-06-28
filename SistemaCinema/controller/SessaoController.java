@@ -1,23 +1,18 @@
-import model.*;
-import view.*;
+import model.Filme;
+import model.Sala;
+import model.Sessao;
+import view.SessaoView;
 
 public class SessaoController {
     private SessaoView view;
-    private FilmeController filmeController;
-    private SalaController salaController;
 
-    public SessaoController(SessaoView view, FilmeController filmeController, SalaController salaController) {
+
+    public SessaoController(SessaoView view) {
         this.view = view;
-        this.filmeController = filmeController;
-        this.salaController = salaController;
+
     }
 
-    public Sessao criarSessao() {
-        Filme filme = filmeController.criarFilme();
-        // filme.exibirFilmes(); <------------- adicionar
-        Sala sala = salaController.criarSala();
-        // sala.exibirSalas(); <--------------- adicionar
-
+    public Sessao criarSessao(Filme filme, Sala sala) {
         String horario = view.lerHorario();
         return new Sessao(filme, sala, horario);
     }

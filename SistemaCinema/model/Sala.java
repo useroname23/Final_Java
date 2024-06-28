@@ -19,6 +19,10 @@ public class Sala {
         return numero;
     }
 
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
     public List<Assento> getAssentos() {
         return assentos;
     }

@@ -1,0 +1,20 @@
+> Filme: a
+> Gênero: a
+ Duração (em minutos): 1
+
+> Sala: 1
+> Assentos:10
+
+ Sessao: a
+> Sala: 1
+> Horário: 10:30
+
+ Ingresso 
+> CPF: 1241
+> Nome: Joao
+ Idade:1
+> Sexo: masc
+> Filme: a
+> Sala: 1
+> Assento: 2
+

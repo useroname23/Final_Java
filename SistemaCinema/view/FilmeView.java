@@ -10,17 +10,49 @@ public class FilmeView {
     }
 
     public String lerTitulo() {
-        System.out.print("> Título do filme: ");
-        return scanner.nextLine();
+        String titulo;
+        while (true) {
+            System.out.print("> Título do filme: ");
+            titulo = scanner.nextLine();
+            if (titulo.matches("[a-zA-Z\\s]+")) {
+                break;
+            } else {
+                System.out.println("Título inválido. Use apenas letras e espaços.");
+            }
+        }
+        return titulo;
     }
 
     public String lerGenero() {
-        System.out.print("> Gênero do filme: ");
-        return scanner.nextLine();
+        String genero;
+        while (true) {
+            System.out.print("> Gênero do filme: ");
+            genero = scanner.nextLine();
+            if (genero.matches("[a-zA-Z\\s]+")) {
+                break;
+            } else {
+                System.out.println("Gênero inválido. Use apenas letras e espaços.");
+            }
+        }
+        return genero;
     }
 
     public int lerDuracao() {
-        System.out.print("> Duração do filme (em minutos): ");
-        return scanner.nextInt();
+        int duracao;
+        while (true) {
+            System.out.print("> Duração do filme (em minutos): ");
+            if (scanner.hasNextInt()) {
+                duracao = scanner.nextInt();
+                if (duracao > 0) {
+                    break;
+                } else {
+                    System.out.println("Digite novamente. Use um número inteiro positivo.");
+                }
+                }else {
+                System.out.println("Digite novamente. Use um número inteiro positivo.");
+                scanner.next();
+            }
+        }
+        return duracao;
     }
 }

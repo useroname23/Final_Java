@@ -11,10 +11,18 @@ public class Filme {
         this.duracao = duracao;
     }
 
+    
+
+
     public String getTitulo() {
         return titulo;
     }
 
+  
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+    
     public String getGenero() {
         return genero;
     }

@@ -1,5 +1,5 @@
-import model.*;
-import view.*;
+import model.Sala;
+import view.SalaView;
 
 public class SalaController {
     private SalaView view;

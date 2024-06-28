@@ -4,7 +4,8 @@ package view;
 import java.util.List;
 import java.util.Scanner;
 
-import model.*;
+import model.Assento;
+import model.Sessao;
 
 
 public class CinemaView {
@@ -17,9 +18,9 @@ public class CinemaView {
     public void exibirMenu() {
         System.out.println("> 1. Adicionar Filme");
         System.out.println("> 2. Adicionar Sala");
-        System.out.println("> 3. Adicionar Sessao");
+        System.out.println("> 3. Adicionar Sessao(Horário)");
         System.out.println("> 4. Comprar Ingresso");
-        System.out.println("> 5. Exibir Mapa de Assentos");
+        System.out.println("> 5. Exibir Assentos da Sala");
         System.out.println("> 6. Adicionar Funcionários");
         System.out.println("> 7. Exibir Funcionários");
         System.out.println("> 0. Sair");

@@ -1,7 +1,5 @@
 package model;
 
-
-
 public class Sessao {
     private Filme filme;
     private Sala sala;
@@ -25,4 +23,13 @@ public class Sessao {
     public String getHorario() {
         return horario;
     }
+
+     public void setSala(Sala sala) {
+        this.sala = sala;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+
 }
