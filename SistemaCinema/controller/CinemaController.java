@@ -85,7 +85,7 @@ private void adicionarSessao() {
     }
 
     SessaoView sessaoView = new SessaoView();
-    // Escolher Filme
+ 
     System.out.println("> Escolha um filme:");
     for (int i = 0; i < cinema.getFilmes().size(); i++) {
         System.out.println(i + ". " + cinema.getFilmes().get(i).getTitulo());
@@ -93,7 +93,7 @@ private void adicionarSessao() {
     int filmeIndex = sessaoView.lerInt("> Filme (índice): ");
     Filme filmeEscolhido = cinema.getFilmes().get(filmeIndex);
 
-    // Escolher Sala
+   
     System.out.println("> Escolha uma sala:");
     for (int i = 0; i < cinema.getSalas().size(); i++) {
         System.out.println(i + ". Sala " + cinema.getSalas().get(i).getNumero());
@@ -101,7 +101,7 @@ private void adicionarSessao() {
     int salaIndex = sessaoView.lerInt("> Sala (índice): ");
     Sala salaEscolhida = cinema.getSalas().get(salaIndex);
 
-    // Criar a sessão com o filme e a sala escolhidos
+   
     System.out.println("> Digite o horário da sessão:");
     String horario = sessaoView.lerString("> Horário: ");
     Sessao sessao = new Sessao(filmeEscolhido, salaEscolhida, horario);
@@ -170,7 +170,7 @@ private void comprarIngresso() {
         List<Sessao> sessoes = cinema.getSessoes();
         for (int i = 0; i < sessoes.size(); i++) {
             Sessao sessao = sessoes.get(i);
-            System.out.println((i + 1) + ". " + sessao.getFilme().getTitulo() + " - " + sessao.getHorario());
+            System.out.println(i + ". " + sessao.getFilme().getTitulo() + " - " + sessao.getHorario());
         }
     }
 
@@ -178,7 +178,7 @@ private void comprarIngresso() {
         List<Assento> assentos = sessao.getSala().getAssentos();
         for (int i = 0; i < assentos.size(); i++) {
             Assento assento = assentos.get(i);
-            System.out.print ((i + 1)+(assento.isOcupado() ? "[X]" : "[O]") + " ");
+            System.out.print (i+(assento.isOcupado() ? "[X]" : "[O]") + " ");
         }
         System.out.println();
     }
