@@ -1,30 +1,25 @@
+package controller;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import model.Assento;
-import model.Cinema;
-import model.Cliente;
-import model.Filme;
-import model.Funcionario;
-import model.Ingresso;
-import model.Sala;
-import model.Sessao;
-import view.CinemaView;
-import view.ClienteView;
-import view.FilmeView;
-import view.FuncionarioView;
-import view.SalaView;
-import view.SessaoView;
+import model.*;
+import view.*;
+
 
 public class CinemaController {
     private Cinema cinema;
     private CinemaView view;
+    private FilmeController filmeController;
+    private SalaController salaController;
 
     public CinemaController(Cinema cinema, CinemaView view) {
         this.cinema = cinema;
         this.view = view;
+        this.filmeController = new FilmeController(new FilmeView());
+        this.salaController = new SalaController(new SalaView());
     }
 
     public void iniciar() {
@@ -63,50 +58,44 @@ public class CinemaController {
     }
     
     private void adicionarFilme() {
-        FilmeView filmeView = new FilmeView();
-        FilmeController filmeController = new FilmeController(filmeView);
         Filme filme = filmeController.criarFilme();
         cinema.adicionarFilme(filme);
-        System.out.println("> Filme adicionado com sucesso!");
+        System.out.println("\n> Filme adicionado com sucesso! \n");
     }
 
     private void adicionarSala() {
-        SalaView salaView = new SalaView();
-        SalaController salaController = new SalaController(salaView);
         Sala sala = salaController.criarSala();
         cinema.adicionarSala(sala);
-        System.out.println("> Sala adicionada com sucesso!");
+        System.out.println("\n> Sala adicionada com sucesso! \n");
     }
 
     private void adicionarSessao() {
         SessaoView sessaoView = new SessaoView();
-        FilmeView filmeView = new FilmeView();
-        SalaView salaView = new SalaView();
-        FilmeController filmeController = new FilmeController(filmeView);
-        SalaController salaController = new SalaController(salaView);
         SessaoController sessaoController = new SessaoController(sessaoView, filmeController, salaController);
-        Sessao sessao = sessaoController.criarSessao();
-        cinema.adicionarSessao(sessao);
-        System.out.println("> Sessão adicionada com sucesso!");
+        Sessao sessao = sessaoController.criarSessao(true);
+        if (sessao != null) {
+            cinema.adicionarSessao(sessao);
+            System.out.println("\n> Sessão adicionada com sucesso! \n");
+        }
     }
 
     private void adicionarFuncionario(){
         FuncionarioView funcionarioView = new FuncionarioView();
         FuncionarioController funcionarioController = new FuncionarioController(funcionarioView);
 
-        System.out.println("> Adicionar Novo Funcionario");
-        String tipo = view.lerString("> Tipo de funcionario (Atendente/Gerente): ");
+        System.out.println("\n> Adicionar Novo Funcionario");
+        String tipo = view.lerString("\n> Tipo de funcionario (Atendente/Gerente): ");
         Funcionario funcionario = funcionarioController.criarFuncionario(tipo);
         if (funcionario != null) {
             cinema.getFuncionarios().add(funcionario);
-            System.out.println("> " + tipo + " Adicionado com sucesso!");
+            System.out.println("\n> " + tipo + " Adicionado com sucesso! \n");
         } else {
-            System.out.println("> Tipo de funcionário inválido");
+            System.out.println("\n> Tipo de funcionário inválido");
         }
     }
 
     private void exibirFuncionarios() {
-        System.out.println("> Lista de Funcionários:");
+        System.out.println("\n> Lista de Funcionários:");
         List<Funcionario> funcionarios = cinema.getFuncionarios();
         if (funcionarios.isEmpty()) {
             System.out.println("> Nenhum funcionário encontrado.");
@@ -120,27 +109,37 @@ public class CinemaController {
 
 
     private void comprarIngresso() {
-        ClienteView clienteView = new ClienteView();
-        ClienteController clienteController = new ClienteController(clienteView);
-        Cliente cliente = clienteController.criarCliente();
+        try {
+            List<Sessao> sessoes = cinema.getSessoes();
+            if (sessoes.isEmpty()) {
+                throw new Exception("Não existem sessões disponíveis.");
+            }
 
-        System.out.println("");
-        exibirSessoes();
-        int sessaoIndex = view.lerInt("> Escolha a sessão (índice): ");
-        Sessao sessao = cinema.getSessoes().get(sessaoIndex);
+            ClienteView clienteView = new ClienteView();
+            ClienteController clienteController = new ClienteController(clienteView);
+            Cliente cliente = clienteController.criarCliente();
 
-        exibirAssentos(sessao);
-        int assentoIndex = view.lerInt("> Escolha o assento (índice): ");
-        Assento assento = sessao.getSala().getAssentos().get(assentoIndex);
+            System.out.println("");
+            exibirSessoes();
+            int sessaoIndex = view.lerInt("\n> Escolha a sessão (índice): ");
+            Sessao sessao = cinema.getSessoes().get(sessaoIndex);
+            
+            System.out.println("");
+            exibirAssentos(sessao);
+            int assentoIndex = view.lerInt("\n> Escolha o assento (índice): ");
+            Assento assento = sessao.getSala().getAssentos().get(assentoIndex);
 
-        if (!assento.isOcupado()) {
-            assento.setOcupado(true);
-            Ingresso ingresso = new Ingresso(cliente, sessao, assento);
-            cinema.adicionarIngresso(ingresso);
-            System.out.println("> Ingresso comprado com sucesso!");
-        } else {
-            System.out.println("> Assento já ocupado.");
-        }
+            if (!assento.isOcupado()) {
+                assento.setOcupado(true);
+                Ingresso ingresso = new Ingresso(cliente, sessao, assento);
+                cinema.adicionarIngresso(ingresso);
+                System.out.println("\n> Ingresso comprado com sucesso! \n");
+            } else {
+                System.out.println("\n> Assento já ocupado. \n");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }    
     }
 
     private void exibirSessoes() {
@@ -157,12 +156,12 @@ public class CinemaController {
             Assento assento = assentos.get(i);
             System.out.print ((i + 1)+(assento.isOcupado() ? "[X]" : "[O]") + " ");
         }
-        System.out.println();
+        System.out.println("\n");
     }
 
     private void exibirMapaAssentos() {
         for (Sessao sessao : cinema.getSessoes()) {
-            System.out.println("> Sessão: " + sessao.getFilme().getTitulo() + " - " + sessao.getHorario());
+            System.out.println("\n> Sessão: " + sessao.getFilme().getTitulo() + " - " + sessao.getHorario() + "\n");
             for (Assento assento : sessao.getSala().getAssentos()) {
                 System.out.print(assento.isOcupado() ? "[X]" : "[O]");
             }
@@ -171,23 +170,34 @@ public class CinemaController {
     }
 
     private void salvarDados() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dadosCinema.txt"))) {
+            writer.write("> FILMES <");
             for (Filme filme : cinema.getFilmes()) {
-                writer.write("> Filme: " + filme.getTitulo() + "\n> Gênero: " + filme.getGenero() + "\n Duração (em minutos): " + filme.getDuracao() + "\n");
+                writer.write("\n> Filme: " + filme.getTitulo() + "\n> Gênero: " + filme.getGenero() + "\n> Duração (em minutos): " + filme.getDuracao() + "\n");
+                System.out.println("\n");
             }
+
+            writer.write("\n> SALAS <");
             for (Sala sala : cinema.getSalas()) {
-                writer.write("> Sala: " + sala.getNumero() + "\n> Assentos:" + sala.getAssentos().size() + "\n");
+                writer.write("\n> Sala: " + sala.getNumero() + "\n> Assentos:" + sala.getAssentos().size() + "\n");
+                System.out.println("\n");
             }
+
+            writer.write("\n> SESSÕES <");
             for (Sessao sessao : cinema.getSessoes()) {
-                writer.write("> Sessao: " + sessao.getFilme().getTitulo() + "\n> Sala: " + sessao.getSala().getNumero() + "\n> Horário: " + sessao.getHorario() + "\n");
+                writer.write("\n> Sessao: " + sessao.getFilme().getTitulo() + "\n> Sala: " + sessao.getSala().getNumero() + "\n> Horário: " + sessao.getHorario() + "\n");
                 System.out.println("\n");
             }
+
+            writer.write("\n> INGRESSOS <");
             for (Ingresso ingresso : cinema.getIngressos()) {
-                writer.write("> Ingresso: \n> CPF: " + ingresso.getCliente().getCpf() + "\n> Nome: "+ingresso.getCliente().getNome() + "\n Idade:" + ingresso.getCliente().getSexo() +  "\n> Sexo: " + ingresso.getCliente().getSexo() + "\n> Filme: " + ingresso.getSessao().getFilme().getTitulo() + "\n> Sala: " + ingresso.getSessao().getSala().getNumero() + "\n> Assento: " + ingresso.getAssento().getNumero() + "\n");
+                writer.write("\n> Ingresso < \n> CPF: " + ingresso.getCliente().getCpf() + "\n> Nome: "+ingresso.getCliente().getNome() + "\n> Idade: " + ingresso.getCliente().getSexo() +  "\n> Sexo: " + ingresso.getCliente().getSexo() + "\n> Filme: " + ingresso.getSessao().getFilme().getTitulo() + "\n> Sala: " + ingresso.getSessao().getSala().getNumero() + "\n> Assento: " + ingresso.getAssento().getNumero() + "\n");
                 System.out.println("\n");
             }
+            
+            writer.write("\n> FUNCIONÁRIOS <");
             for (Funcionario funcionario : cinema.getFuncionarios()) {
-                writer.write("> Funcionario: \n> CPF: " + funcionario.getCpf() + "\n> Nome: "+funcionario.getNome() + "\n> Sexo: " + funcionario.getSexo());
+                writer.write("\n> CPF: " + funcionario.getCpf() + "\n> Nome: "+funcionario.getNome() + "\n> Sexo: " + funcionario.getSexo());
                 System.out.println("\n");
             }
         } catch (IOException e) {

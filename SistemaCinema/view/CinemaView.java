@@ -22,7 +22,7 @@ public class CinemaView {
         System.out.println("> 5. Exibir Mapa de Assentos");
         System.out.println("> 6. Adicionar Funcionários");
         System.out.println("> 7. Exibir Funcionários");
-        System.out.println("> 0. Sair");
+        System.out.println("> 0. Sair \n");
     }
 
     public int lerOpcao() {
