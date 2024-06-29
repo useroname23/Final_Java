@@ -61,7 +61,7 @@ public class CinemaController {
         FilmeController filmeController = new FilmeController(filmeView);
         Filme filme = filmeController.criarFilme();
         cinema.adicionarFilme(filme);
-        System.out.println("> Filme adicionado com sucesso!");
+        System.out.println("> Filme adicionado com sucesso!\n");
     }
 
     private void adicionarSala() {
@@ -69,12 +69,12 @@ public class CinemaController {
         SalaController salaController = new SalaController(salaView);
         Sala sala = salaController.criarSala();
         cinema.adicionarSala(sala);
-        System.out.println("> Sala adicionada com sucesso!");
+        System.out.println("> Sala adicionada com sucesso!\n");
     }
 
     private void adicionarSessao() {
         if (cinema.getFilmes().isEmpty() || cinema.getSalas().isEmpty()) {
-            System.out.println("> Não há filmes ou salas disponíveis. Adicione-os primeiro.");
+            System.out.println("> Não há filmes ou salas disponíveis. Adicione-os primeiro.\n");
             return;
         }
         SessaoView sessaoView = new SessaoView();
@@ -99,7 +99,7 @@ public class CinemaController {
         Sessao sessao = new Sessao(filmeEscolhido, salaEscolhida, horario);
 
         cinema.adicionarSessao(sessao);
-        System.out.println("> Sessão adicionada com sucesso!");
+        System.out.println("> Sessão adicionada com sucesso!\n");
     }
 
     private void comprarIngresso() {
@@ -113,20 +113,20 @@ public class CinemaController {
 
         System.out.println("");
         exibirSessoes();
-        int sessaoIndex = view.lerInt("> Escolha a sessão: ");
+        int sessaoIndex = view.lerInt("\n> Escolha a sessão: ");
         Sessao sessao = cinema.getSessoes().get(sessaoIndex);
 
         exibirAssentos(sessao);
-        int assentoIndex = view.lerInt("> Escolha o assento: ");
+        int assentoIndex = view.lerInt("\n> Escolha o assento: ");
         Assento assento = sessao.getSala().getAssentos().get(assentoIndex);
 
         if (!assento.isOcupado()) {
             assento.setOcupado(true);
             Ingresso ingresso = new Ingresso(cliente, sessao, assento);
             cinema.adicionarIngresso(ingresso);
-            System.out.println("> Ingresso comprado com sucesso!");
+            System.out.println("> Ingresso comprado com sucesso!\n");
         } else {
-            System.out.println("> Assento já ocupado.");
+            System.out.println("> Assento já ocupado.\n");
         }
     }
         
@@ -198,7 +198,9 @@ public class CinemaController {
         List<Assento> assentos = sessao.getSala().getAssentos();
         for (int i = 0; i < assentos.size(); i++) {
             Assento assento = assentos.get(i);
-            System.out.print ((i + 1) + (assento.isOcupado() ? "[X]" : "[O]") + " ");
+            String vermelho = "\u001B[31m";
+            String branco = "\u001B[37m";
+            System.out.print ((i + 1) + (assento.isOcupado() ? (vermelho + "[X]") : (branco + "[O]")) + " ");
         }
         System.out.println();
     }

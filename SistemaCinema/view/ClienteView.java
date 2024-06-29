@@ -30,6 +30,7 @@ public class ClienteView {
             if (scanner.hasNextInt()) {
                 cpf = scanner.nextInt();
                 if (cpf > 0) {
+                    scanner.nextLine();
                     break;
                 } else {
                     System.out.println("Digite novamente. Use um número inteiro positivo.");
@@ -48,6 +49,7 @@ public class ClienteView {
             if (scanner.hasNextInt()) {
                 idadi = scanner.nextInt();
                 if (idadi > 0) {
+                    scanner.nextLine();
                     break;
                 } else {
                     System.out.println("Digite novamente. Use um número inteiro positivo.");
