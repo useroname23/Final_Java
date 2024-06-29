@@ -23,4 +23,14 @@ public class FuncionarioController {
             return null;
         }
     }
+
+    public void editarFuncionario(Funcionario funcionario) {
+        String nome = view.lerNome();
+        int cpf = view.lerCpf();
+        String sexo = view.lerSexo();
+        
+        funcionario.setNome(nome);
+        funcionario.setCpf(cpf);
+        funcionario.setSexo(sexo);
+    }
 }

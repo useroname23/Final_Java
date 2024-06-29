@@ -1,3 +1,5 @@
+package controller;
+
 import model.Filme;
 import model.Sala;
 import model.Sessao;

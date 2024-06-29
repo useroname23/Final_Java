@@ -3,7 +3,6 @@ package view;
 
 import java.util.List;
 import java.util.Scanner;
-
 import model.Assento;
 import model.Sessao;
 
@@ -22,7 +21,9 @@ public class CinemaView {
         System.out.println("> 4. Comprar Ingresso");
         System.out.println("> 5. Exibir Assentos da Sala");
         System.out.println("> 6. Adicionar Funcionários");
-        System.out.println("> 7. Exibir Funcionários");
+        System.out.println("> 7. Editar Funcionários");
+        System.out.println("> 8. Excluir Funcionários");
+        System.out.println("> 9. Exibir Funcionários");
         System.out.println("> 0. Sair");
     }
 

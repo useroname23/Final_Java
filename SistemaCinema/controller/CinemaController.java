@@ -1,18 +1,18 @@
-    import java.io.BufferedWriter;
-    import java.io.FileWriter;
-    import java.io.IOException;
-    import java.util.List;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
-    import model.*;
-    import view.*;
+import model.*;
+import view.*;
 
-    public class CinemaController {
-        private Cinema cinema;
-        private CinemaView view;
+public class CinemaController {
+    private Cinema cinema;
+    private CinemaView view;
 
-        public CinemaController(Cinema cinema, CinemaView view) {
-            this.cinema = cinema;
-            this.view = view;
+    public CinemaController(Cinema cinema, CinemaView view) {
+        this.cinema = cinema;
+        this.view = view;
         }
         
         public void iniciar() {
@@ -39,6 +39,12 @@
                         adicionarFuncionario();
                         break;
                     case 7:
+                        editarFuncionario();
+                        break;
+                    case 8:
+                        excluirFuncionario();
+                        break;
+                    case 9:
                         exibirFuncionarios();
                         break;
                     case 0:
@@ -123,86 +129,114 @@
             System.out.println("> Assento já ocupado.");
         }
     }
+        
+    private void adicionarFuncionario(){
+        FuncionarioView funcionarioView = new FuncionarioView();
+        FuncionarioController funcionarioController = new FuncionarioController(funcionarioView);
 
-
-        private void exibirFuncionarios() {
-            System.out.println("> Lista de Funcionários:");
-            List<Funcionario> funcionarios = cinema.getFuncionarios();
-            if (funcionarios.isEmpty()) {
-                System.out.println("> Nenhum funcionário encontrado.");
-            } else {
-                for (Funcionario funcionario : funcionarios) {
-                    funcionario.mostrarInformacoes();
-                    System.out.println(""); 
-                }
-            }
+        System.out.println("> Adicionar Novo Funcionario");
+        String tipo = view.lerString("> Tipo de funcionario (Atendente/Gerente): ");
+        Funcionario funcionario = funcionarioController.criarFuncionario(tipo);
+        if (funcionario != null) {
+            cinema.getFuncionarios().add(funcionario);
+            System.out.println("> " + tipo + " Adicionado com sucesso!\n");
+        } else {
+            System.out.println("> Tipo de funcionário inválido\n");
         }
-        private void adicionarFuncionario(){
+    }
+
+    private void editarFuncionario() {
+        System.out.println("\n> Editar Funcionario");
+        exibirFuncionarios();
+        int funcionarioIndex = view.lerInt("> Escolha o número do funcionário a ser editado: ");
+    
+        if (funcionarioIndex >= 0 && funcionarioIndex < cinema.getFuncionarios().size()) {
+            Funcionario funcionario = cinema.getFuncionarios().get(funcionarioIndex);
             FuncionarioView funcionarioView = new FuncionarioView();
             FuncionarioController funcionarioController = new FuncionarioController(funcionarioView);
-
-            System.out.println("> Adicionar Novo Funcionario");
-            String tipo = view.lerString("> Tipo de funcionario (Atendente/Gerente): ");
-            Funcionario funcionario = funcionarioController.criarFuncionario(tipo);
-            if (funcionario != null) {
-                cinema.getFuncionarios().add(funcionario);
-                System.out.println("> " + tipo + " Adicionado com sucesso!");
-            } else {
-                System.out.println("> Tipo de funcionário inválido");
+            funcionarioController.editarFuncionario(funcionario);
+            System.out.println("> Funcionário editado com sucesso!\n");
+        } else {
+            System.out.println("> Índice inválido. Tente novamente.\n");
+        }
+    }    
+    
+    private void excluirFuncionario() {
+        System.out.println("\n> Excluir Funcionario");
+        exibirFuncionarios();
+        int funcionarioIndex = view.lerInt("\n> Escolha o número do funcionário a ser excluído: ");
+    
+        if (funcionarioIndex >= 0 && funcionarioIndex < cinema.getFuncionarios().size()) {
+            Funcionario funcionario = cinema.getFuncionarios().remove(funcionarioIndex);
+            System.out.println("> Funcionário " + funcionario.getNome() + " excluído com sucesso!\n");
+        } else {
+            System.out.println("> Índice inválido. Tente novamente.\n");
+        }
+    }
+            
+    private void exibirFuncionarios() {
+        System.out.println("\n> Lista de Funcionários:");
+        List<Funcionario> funcionarios = cinema.getFuncionarios();
+        if (funcionarios.isEmpty()) {
+            System.out.println("\n> Nenhum funcionário encontrado.");
+        } else {
+            for (int i = 0; i < funcionarios.size(); i++) {
+                System.out.println((i + 1) + ". " + funcionarios.get(i).getNome());
             }
         }
+    }    
 
-        private void exibirSessoes() {
-            List<Sessao> sessoes = cinema.getSessoes();
-            for (int i = 0; i < sessoes.size(); i++) {
-                Sessao sessao = sessoes.get(i);
-                System.out.println((i + 1) + ". " + sessao.getFilme().getTitulo() + " - " + sessao.getHorario());
-            }
+   private void exibirSessoes() {
+        List<Sessao> sessoes = cinema.getSessoes();
+        for (int i = 0; i < sessoes.size(); i++) {
+            Sessao sessao = sessoes.get(i);
+            System.out.println((i + 1) + ". " + sessao.getFilme().getTitulo() + " - " + sessao.getHorario());
         }
+    }
 
-        private void exibirAssentos(Sessao sessao) {
-            List<Assento> assentos = sessao.getSala().getAssentos();
-            for (int i = 0; i < assentos.size(); i++) {
-                Assento assento = assentos.get(i);
-                System.out.print ((i + 1) + (assento.isOcupado() ? "[X]" : "[O]") + " ");
+    private void exibirAssentos(Sessao sessao) {
+        List<Assento> assentos = sessao.getSala().getAssentos();
+        for (int i = 0; i < assentos.size(); i++) {
+            Assento assento = assentos.get(i);
+            System.out.print ((i + 1) + (assento.isOcupado() ? "[X]" : "[O]") + " ");
+        }
+        System.out.println();
+    }
+
+    private void exibirMapaAssentos() {
+        for (Sessao sessao : cinema.getSessoes()) {
+            System.out.println("> Sessão: " + sessao.getFilme().getTitulo() + " - " + sessao.getHorario());
+            for (Assento assento : sessao.getSala().getAssentos()) {
+                System.out.print(assento.isOcupado() ? "[X]" : "[O]");
             }
             System.out.println();
         }
+    }
 
-        private void exibirMapaAssentos() {
+    private void salvarDados() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados.txt"))) {
+            for (Filme filme : cinema.getFilmes()) {
+                writer.write("> Filme: " + filme.getTitulo() + "\n> Gênero: " + filme.getGenero() + "\n Duração (em minutos): " + filme.getDuracao() + "\n");
+                writer.write("\n");
+            }
+            for (Sala sala : cinema.getSalas()) {
+                writer.write("> Sala: " + sala.getNumero() + "\n> Assentos:" + sala.getAssentos().size() + "\n");
+                writer.write("\n");
+            }
             for (Sessao sessao : cinema.getSessoes()) {
-                System.out.println("> Sessão: " + sessao.getFilme().getTitulo() + " - " + sessao.getHorario());
-                for (Assento assento : sessao.getSala().getAssentos()) {
-                    System.out.print(assento.isOcupado() ? "[X]" : "[O]");
-                }
-                System.out.println();
+                writer.write(" Sessao: " + sessao.getFilme().getTitulo() + "\n> Sala: " + sessao.getSala().getNumero() + "\n> Horário: " + sessao.getHorario() + "\n");
+                writer.write("\n");
             }
-        }
-
-        private void salvarDados() {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("dados.txt"))) {
-                for (Filme filme : cinema.getFilmes()) {
-                    writer.write("> Filme: " + filme.getTitulo() + "\n> Gênero: " + filme.getGenero() + "\n Duração (em minutos): " + filme.getDuracao() + "\n");
-                    writer.write("\n");
-                }
-                for (Sala sala : cinema.getSalas()) {
-                    writer.write("> Sala: " + sala.getNumero() + "\n> Assentos:" + sala.getAssentos().size() + "\n");
-                    writer.write("\n");
-                }
-                for (Sessao sessao : cinema.getSessoes()) {
-                    writer.write(" Sessao: " + sessao.getFilme().getTitulo() + "\n> Sala: " + sessao.getSala().getNumero() + "\n> Horário: " + sessao.getHorario() + "\n");
-                    writer.write("\n");
-                }
-                for (Ingresso ingresso : cinema.getIngressos()) {
-                    writer.write(" Ingresso \n> CPF: " + ingresso.getCliente().getCpf() + "\n> Nome: "+ingresso.getCliente().getNome() + "\n Idade:" + ingresso.getCliente().getIdade() +  "\n> Sexo: " + ingresso.getCliente().getSexo() + "\n> Filme: " + ingresso.getSessao().getFilme().getTitulo() + "\n> Sala: " + ingresso.getSessao().getSala().getNumero() + "\n> Assento: " + ingresso.getAssento().getNumero() + "\n");
-                    writer.write("\n");
-                }
-                for (Funcionario funcionario : cinema.getFuncionarios()) {
-                    writer.write(" Funcionario \n> CPF: " + funcionario.getCpf() + "\n> Nome: "+funcionario.getNome() + "\n> Sexo: " + funcionario.getSexo());
-                    writer.write("\n");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            for (Ingresso ingresso : cinema.getIngressos()) {
+                writer.write(" Ingresso \n> CPF: " + ingresso.getCliente().getCpf() + "\n> Nome: "+ingresso.getCliente().getNome() + "\n Idade:" + ingresso.getCliente().getIdade() +  "\n> Sexo: " + ingresso.getCliente().getSexo() + "\n> Filme: " + ingresso.getSessao().getFilme().getTitulo() + "\n> Sala: " + ingresso.getSessao().getSala().getNumero() + "\n> Assento: " + ingresso.getAssento().getNumero() + "\n");
+                writer.write("\n");
             }
+            for (Funcionario funcionario : cinema.getFuncionarios()) {
+                writer.write(" Funcionario \n> CPF: " + funcionario.getCpf() + "\n> Nome: "+funcionario.getNome() + "\n> Sexo: " + funcionario.getSexo());
+                writer.write("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+}
